@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Delete Posts </title>
+</head>
+
+<body>
+
+    <form id="deletePost" action="DeletePost.php" method="post">
+
+        <?php 
+                $mysqli = new mysqli("mysql.eecs.ku.edu", "z274d418", "so9bo9oX", "z274d418");
+
+                $users = array();
+                $content = array();
+                $postId = array();
+                $query = "SELECT post_id, author_id, content FROM Posts";
+                $length = 0;
+                if ($result = $mysqli->query($query)) {
+
+                    while ($row = $result->fetch_assoc()) {
+                        $users[$length] = $row["author_id"];
+                        $content[$length] = $row["content"];
+                        $postId[$length] = $row["post_id"];
+                        $length++;
+                    }
+
+                    $result->free();
+                } 
+
+
+                echo "<table><tr><th>Delete?</th><th>Post Author</th><th>Post Content</th></tr>";
+
+                $arrlength = count($users);
+                for($x = 0; $x < $arrlength; $x++) {
+                        echo "<tr><td><input type=\"checkbox\" name=\"delete[]\" value=\"".$postId[$x]."\"></td>";
+                        echo "<td>".$users[$x]."</td>";
+                        echo "<td>".$content[$x]."</td></tr>";
+                }
+                    echo "</table>";
+
+                $mysqli->close();
+        ?>
+
+
+        <br><br>
+        <input type="submit" value="Delete Posts">
+
+
+
+
+    </form>
+
+    <a href='AdminHome.html'>Back to Admin</a>
+
+</body>
+
+</html>
